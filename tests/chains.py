@@ -193,6 +193,10 @@ class TestDefUseChains(TestCase):
         code = "from some import decorator\n@decorator\nclass C:pass"
         self.checkChains(code, ["decorator -> (decorator -> (C -> ()))", "C -> ()"])
 
+    def test_class_annotation(self):
+        code = "type_ = int\ndef foo(bar: type_): pass"
+        self.checkChains(code, ['type_ -> (type_ -> ())', 'foo -> ()'])
+
 
 class TestUseDefChains(TestCase):
     def checkChains(self, code, ref):
